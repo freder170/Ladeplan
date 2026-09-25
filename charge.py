@@ -308,6 +308,9 @@ def main():
         "charger": charger_state, "action": action,
         "plan": result,
         "tariff_source": "TREFOR El-net (live)" if tariffs else "skøn",
+        # priser til appen (browseren må ikke selv kalde Energi Data Service)
+        "hours": [{"t": t.isoformat(), "spot": round(spot, 5), "est": est} for t, spot, est in hours],
+        "tariffs": tariffs,
     }
     with open("state.json", "w") as f:
         json.dump(state, f, ensure_ascii=False, indent=2, default=str)

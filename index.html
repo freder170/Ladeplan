@@ -258,7 +258,6 @@ async function loadTariffs(){
     const f=encodeURIComponent(JSON.stringify({ChargeOwner:['TREFOR El-net A/S'],ChargeType:['D03']}));
     const j=await fetchJSON(`https://api.energidataservice.dk/dataset/DatahubPricelist?filter=${f}&sort=ValidFrom%20desc&limit=40`);
     const now=new Date();
-    // Find tidsdifferentierede net-tariffer (Price1..24 varierer) der gælder nu og i den anden sæson
     const recs=(j.records||[]).filter(r=>{const p=[...Array(24)].map((_,i)=>r['Price'+(i+1)]);return p.some(x=>x!=null&&x!==p[0])});
     const pick=(date)=>recs.find(r=>new Date(r.ValidFrom)<=date&&(!r.ValidTo||new Date(r.ValidTo)>date));
     const cur=pick(now);
@@ -266,7 +265,6 @@ async function loadTariffs(){
     const other=pick(new Date(now.getFullYear(),now.getMonth()+6,1))||cur;
     const arr=r=>[...Array(24)].map((_,i)=>Number(r['Price'+(i+1)]));
     tariffTable=isWinter(now)?{winter:arr(cur),summer:arr(other)}:{winter:arr(other),summer:arr(cur)};
-    tariffTable.source=cur.Note||cur.ChargeTypeCode;
     document.getElementById('tariffNote').innerHTML=`Nettarif: TREFOR El-net <span class="tag ok">live</span>`;
   }catch(e){
     document.getElementById('tariffNote').innerHTML=`Nettarif: TREFOR El-net <span class="tag">skøn – kunne ikke hentes</span>`;
@@ -279,14 +277,13 @@ async function loadPrices(){
   const end=new Date(now.getFullYear(),now.getMonth(),now.getDate()+2);
   const f=encodeURIComponent(JSON.stringify({PriceArea:['DK1']}));
   let recs;
-  try{ // 15-minutters day-ahead-priser (fra okt. 2025)
+  try{
     const j=await fetchJSON(`https://api.energidataservice.dk/dataset/DayAheadPrices?start=${isoDate(start)}&end=${isoDate(end)}&filter=${f}&sort=TimeDK%20asc&limit=0`);
     recs=j.records.map(r=>({t:new Date(r.TimeDK),p:r.DayAheadPriceDKK/1000}));
-  }catch(e){ // ældre timedatasæt
+  }catch(e){
     const j=await fetchJSON(`https://api.energidataservice.dk/dataset/Elspotprices?start=${isoDate(start)}&end=${isoDate(end)}&filter=${f}&sort=HourDK%20asc&limit=0`);
     recs=j.records.map(r=>({t:new Date(r.HourDK),p:r.SpotPriceDKK/1000}));
   }
-  // saml til timer
   const map=new Map();
   for(const r of recs){const key=new Date(r.t.getFullYear(),r.t.getMonth(),r.t.getDate(),r.t.getHours()).getTime();
     const m=map.get(key)||{s:0,n:0};m.s+=r.p;m.n++;map.set(key,m)}
@@ -415,7 +412,7 @@ function draw24(P){
   const svg=document.getElementById('chart24'); const now=new Date();
   const from=new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours());
   const data=hours.filter(h=>h.t>=from&&h.t<from.getTime()+24*3600000).map(h=>({...h,price:fullPrice(h.spot,h.t)}));
-  if(!data.length){svg.innerHTML='';document.getElementById('err24').innerHTML='<div class="err">Kunne ikke hente priser fra Energi Data Service. Tjek forbindelsen og tryk ↻.</div>';return}
+  if(!data.length){svg.innerHTML='';document.getElementById('err24').innerHTML='<div class="err">Ingen priser endnu. Scriptet på GitHub henter dem hvert kvarter – tryk ↻ om et par minutter.</div>';return}
   document.getElementById('err24').innerHTML='';
   const W=360,H=170,pad={l:26,r:4,t:8,b:22};const max=Math.max(0.5,...data.map(d=>d.price));const min=Math.min(0,...data.map(d=>d.price));
   const y=v=>pad.t+(H-pad.t-pad.b)*(1-(v-min)/(max-min));const bw=(W-pad.l-pad.r)/24;
@@ -520,12 +517,23 @@ async function doSync(){
   }catch(e){st.textContent='Kunne ikke sende planen: '+e.message+'. Tjek repo og token under ⚙.'}
 }
 
+function pricesFromState(){
+  if(!state||!Array.isArray(state.hours)||!state.hours.length)return false;
+  hours=state.hours.map(h=>({t:new Date(h.t),spot:h.spot,est:!!h.est})).sort((a,b)=>a.t-b.t);
+  if(state.tariffs&&state.tariffs.winter){tariffTable={winter:state.tariffs.winter,summer:state.tariffs.summer};
+    document.getElementById('tariffNote').innerHTML='Nettarif: TREFOR El-net <span class="tag ok">live</span>'}
+  else document.getElementById('tariffNote').innerHTML='Nettarif: TREFOR El-net <span class="tag">skøn</span>';
+  return true;
+}
 async function boot(){
   document.getElementById('nuState').textContent='Henter priser…';
-  await Promise.all([loadTariffs(),loadPrices().catch(()=>{hours=[]}),loadState()]);
+  await loadState();
+  if(!pricesFromState()){ // ingen state.json endnu (fx før første kørsel) – prøv selv
+    await Promise.all([loadTariffs(),loadPrices().catch(()=>{hours=[]})]);
+  }
   render();renderState();
 }
-setInterval(()=>{loadState().then(()=>{render();renderState()})},5*60000);
+setInterval(()=>{loadState().then(()=>{pricesFromState();render();renderState()})},5*60000);
 boot();
 setInterval(render,60000);
 </script>
