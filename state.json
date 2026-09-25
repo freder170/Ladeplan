@@ -1,7 +1,13 @@
 {
+<<<<<<< Updated upstream
   "updated": "2026-09-25T17:29:34.734715+02:00",
   "soc": 49.5,
   "soc_updated": "2026-09-25T17:29:34.734715+02:00",
+=======
+  "updated": "2026-09-25T17:30:02.122701+02:00",
+  "soc": 49.5,
+  "soc_updated": "2026-09-25T17:30:02.122701+02:00",
+>>>>>>> Stashed changes
   "car_plugged": false,
   "car_charging": false,
   "charger": {
