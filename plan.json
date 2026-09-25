@@ -1,0 +1,15 @@
+{
+  "plan": [
+    {"time": "07:00", "pct": 80, "on": true},
+    {"time": "07:00", "pct": 80, "on": true},
+    {"time": "07:00", "pct": 80, "on": true},
+    {"time": "07:00", "pct": 80, "on": true},
+    {"time": "07:00", "pct": 80, "on": true},
+    {"time": "10:00", "pct": 80, "on": true},
+    {"time": "10:00", "pct": 80, "on": true}
+  ],
+  "override": null,
+  "manual": null,
+  "soc_manual": null,
+  "settings": {"battery": 84, "power": 11, "loss": 10, "gasel": 0.06, "transport": 0.125, "tax": 0.73}
+}

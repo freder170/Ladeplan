@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ladeplan – Ioniq 5 · Vejle</title>
+<style>
+:root{
+  --bg:#EEF4F3; --card:#FFFFFF; --ink:#0F2A2A; --muted:#6B8280; --line:#E3ECEA;
+  --teal:#0E8F80; --teal-d:#0B6F63; --teal-l:#D6F0EC; --navy:#0F3B4A;
+  --red:#E0482D; --red-d:#B93A22; --bar:#CBDAD7; --radius:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,"SF Pro Text",system-ui,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+header{background:linear-gradient(100deg,#0F3B4A 0%,#0E7F72 60%,#17A695 100%);color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:12px}
+.logo{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-weight:700}
+header h1{font-size:17px;margin:0;font-weight:700}
+header small{display:block;font-size:12px;opacity:.85;font-weight:400}
+header .spacer{flex:1}
+.hbtn{background:rgba(255,255,255,.16);border:0;color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer}
+main{padding:14px;display:grid;gap:14px;max-width:1180px;margin:0 auto}
+@media(min-width:900px){main{grid-template-columns:1fr 1fr 1fr}.wide{grid-column:span 2}}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:0 1px 2px rgba(15,42,42,.05)}
+.chead{display:flex;align-items:flex-start;gap:12px;padding:16px 16px 12px;border-bottom:1px solid var(--line)}
+.chead .ic{width:34px;height:34px;border-radius:10px;background:var(--teal-l);color:var(--teal);display:grid;place-items:center;flex:none;font-size:16px}
+.chead h2{margin:0;font-size:16px;font-weight:700}
+.chead p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.chead .right{margin-left:auto;font-size:12px;font-weight:600;color:var(--teal);background:var(--teal-l);padding:5px 9px;border-radius:9px;white-space:nowrap}
+.cbody{padding:14px 16px 16px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.row .k{color:var(--muted)}.row .v{font-weight:600}
+.row.total .k,.row.total .v{color:var(--ink);font-weight:700}
+.ring{display:grid;place-items:center;position:relative;margin:6px auto 10px;width:190px;height:190px}
+.ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring .num{font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+.ring .num span{font-size:20px;font-weight:600}
+.ring .sub{text-align:center;font-size:12.5px;color:var(--muted)}
+.ring .sub b{display:block;color:var(--teal);font-size:12px;margin-top:3px}
+.soc-edit{display:flex;gap:8px;align-items:center;justify-content:center;font-size:13px;color:var(--muted);margin-bottom:8px}
+.soc-edit input{width:64px;padding:6px 8px;border:1px solid var(--line);border-radius:9px;text-align:center;font-weight:700;color:var(--ink)}
+.big{width:100%;border:0;border-radius:14px;padding:15px;font-weight:700;font-size:15.5px;color:#fff;background:linear-gradient(90deg,var(--red),var(--red-d));cursor:pointer;margin-top:12px}
+.big[disabled]{opacity:.45;cursor:not-allowed}
+.note{font-size:12px;color:var(--muted);text-align:center;margin:10px 0 0;line-height:1.45}
+.plan-row{display:grid;grid-template-columns:44px 1fr auto auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.plan-row:last-child{border-bottom:0}
+.plan-row .d{color:var(--muted);font-size:13px}
+.plan-row input[type=time]{border:0;background:none;font-size:18px;font-weight:700;padding:0;width:84px}
+.plan-row select{border:0;background:none;color:var(--teal);font-weight:600;font-size:14px;padding:0 2px}
+.tog{width:44px;height:26px;border-radius:13px;background:#D8E3E1;border:0;position:relative;cursor:pointer;transition:background .2s}
+.tog::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.tog[aria-checked=true]{background:var(--teal)}.tog[aria-checked=true]::after{left:21px}
+.price-big{font-size:40px;font-weight:800;letter-spacing:-1.5px;margin:4px 0 8px}
+.price-big small{font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px}
+.chart{width:100%;height:170px;display:block;touch-action:manipulation}
+.chart rect.b{fill:var(--bar)}
+.chart rect.b.plan{fill:var(--teal)}
+.chart rect.b.now{stroke:var(--navy);stroke-width:2.5}
+.chart rect.b.neg{fill:#A7E3D8}
+.chart rect.b.est{fill:url(#hatch);stroke:var(--bar);stroke-width:1}
+.chart rect.b.est.plan{fill:url(#hatchT);stroke:var(--teal)}
+.now-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.now-grid label{font-size:12.5px;color:var(--muted);display:block}
+.now-grid input,.now-grid select{width:100%;margin-top:4px;padding:9px 10px;border:1px solid var(--line);border-radius:11px;font-weight:700;font-size:16px;background:#fff}
+.btn-row{display:flex;gap:8px}
+.btn-row .btn{flex:1;padding:13px 10px;font-size:14.5px}
+.btn.go{background:var(--teal);color:#fff}
+.btn.ghost{background:var(--bg)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#FFF6E5;color:#8A5A0B;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:600;margin-bottom:10px}
+.badge.on{background:var(--teal-l);color:var(--teal-d)}
+.chart text{font-size:10px;fill:var(--muted)}
+.chart text.now{fill:var(--ink);font-weight:700}
+.pill{background:var(--bg);border-radius:12px;padding:10px 12px;font-size:13.5px;margin-top:10px}
+.pill b{font-weight:700}
+.block{display:flex;align-items:center;gap:10px;background:var(--teal-l);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;font-weight:600}
+.block::before{content:"";width:5px;height:20px;border-radius:3px;background:var(--teal)}
+.block .r{margin-left:auto;color:var(--teal);font-size:12.5px;font-weight:600}
+.empty{color:var(--muted);font-size:13.5px;text-align:center;padding:14px 0}
+.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:7px;background:#FFF1E6;color:#9A4B12;font-weight:600;margin-left:6px;vertical-align:middle}
+.tag.ok{background:var(--teal-l);color:var(--teal-d)}
+dialog{border:0;border-radius:var(--radius);padding:0;width:min(440px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(15,42,42,.45)}
+dialog .cbody label{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+dialog .cbody label:last-of-type{border-bottom:0}
+dialog input,dialog select{width:120px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;text-align:right}
+dialog .actions{display:flex;gap:8px;justify-content:flex-end;padding:0 16px 16px}
+.btn{border:0;border-radius:11px;padding:10px 14px;font-weight:600;cursor:pointer;background:var(--bg)}
+.btn.primary{background:var(--teal);color:#fff}
+.err{background:#FFF1E6;color:#9A4B12;border-radius:12px;padding:10px 12px;font-size:13px;margin-top:10px}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⚡</div>
+  <div><h1>Ladeplan</h1><small>Ioniq 5 · Zaptec · Vejle (DK1)</small></div>
+  <div class="spacer"></div>
+  <button class="hbtn" id="btnRefresh" title="Opdater priser">↻</button>
+  <button class="hbtn" id="btnSettings" title="Indstillinger">⚙</button>
+</header>
+
+<main>
+  <!-- NU -->
+  <section class="card">
+    <div class="chead"><div class="ic">⚡</div>
+      <div><h2>Nu</h2><p id="nuSub">Klar kl. –</p></div>
+      <div class="right" id="nuState">Planlægger</div></div>
+    <div class="cbody">
+      <div class="ring">
+        <svg viewBox="0 0 190 190"><circle cx="95" cy="95" r="82" fill="none" stroke="#E3ECEA" stroke-width="14"/>
+          <circle id="ringArc" cx="95" cy="95" r="82" fill="none" stroke="url(#g)" stroke-width="14" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515"/>
+          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#17A695"/><stop offset="1" stop-color="#0B6F63"/></linearGradient></defs></svg>
+        <div><div class="num"><span id="socNum">–</span><span>%</span></div>
+          <div class="sub">Mål <span id="targetTxt">–</span> %<b id="ringLabel">Venter på plan</b></div></div>
+      </div>
+      <div class="soc-edit">Batteri nu <input id="socInput" type="number" min="0" max="100" value="45"> % <span class="tag" id="socTag">manuelt</span></div>
+      <div class="row"><span class="k">Lader (Zaptec)</span><span class="v" id="zapState">Ikke tilkoblet</span></div>
+      <div class="row"><span class="k">Skal lades</span><span class="v" id="kwhNeeded">–</span></div>
+      <div class="row"><span class="k">Samlet ladetid</span><span class="v" id="chargeTime">–</span></div>
+      <div class="row"><span class="k">Forventet færdig</span><span class="v" id="doneAt">–</span></div>
+      <div class="row"><span class="k">Pris for ladningen</span><span class="v" id="planCost">–</span></div>
+      <button class="big" id="btnStop" disabled>Stop ladning nu</button>
+      <p class="note" id="syncStatus" style="margin-top:8px"></p>
+      <p class="note" id="stopNote">Zaptec er ikke tilkoblet endnu. Når den er, tænder og slukker laderen efter blokkene herunder.</p>
+    </div>
+  </section>
+
+  <!-- LAD I DAG -->
+  <section class="card">
+    <div class="chead"><div class="ic">▶</div>
+      <div><h2>Lad i dag</h2><p>Sæt et mål for i dag – gælder kun denne gang</p></div></div>
+    <div class="cbody">
+      <div id="overrideBadge"></div>
+      <div class="now-grid">
+        <label>Skal være klar<input type="time" id="oTime" value="17:00"></label>
+        <label>Dag<select id="oDay"><option value="0">I dag</option><option value="1">I morgen</option></select></label>
+        <label>Mål<select id="oPct"><option>50 %</option><option>60 %</option><option>70 %</option><option selected>80 %</option><option>90 %</option><option>100 %</option></select></label>
+      </div>
+      <div class="btn-row">
+        <button class="btn go" id="btnOverride">Planlæg billigst</button>
+        <button class="btn ghost" id="btnManual">Start ladning nu</button>
+      </div>
+      <p class="note"><b>Planlæg billigst</b> lader i de billigste timer inden tidspunktet. <b>Start ladning nu</b> lader uafbrudt til målet er nået, uanset pris. Ugeplanen tager over igen bagefter.</p>
+    </div>
+  </section>
+
+  <!-- PLAN -->
+  <section class="card">
+    <div class="chead"><div class="ic">📅</div>
+      <div><h2>Plan</h2><p>Hvornår bilen skal være klar</p></div></div>
+    <div class="cbody" id="planRows"></div>
+    <p class="note" style="padding:0 16px 14px;margin-top:0">Tidspunktet er, hvornår bilen skal være klar den dag. Ladningen lægges i de billigste timer inden.</p>
+  </section>
+
+  <!-- PRIS -->
+  <section class="card">
+    <div class="chead"><div class="ic">📈</div>
+      <div><h2>Pris</h2><p>Samlet pris lige nu, inkl. moms</p></div></div>
+    <div class="cbody">
+      <div class="price-big"><span id="priceNow">–</span><small>kr./kWh</small></div>
+      <div id="breakdown"></div>
+      <div id="tariffNote" class="note" style="text-align:left"></div>
+    </div>
+  </section>
+
+  <!-- 24 TIMER -->
+  <section class="card">
+    <div class="chead"><div class="ic">▮</div>
+      <div><h2>De næste 24 timer</h2><p>Pris pr. time – de timer, planen lader i, er fremhævet</p></div></div>
+    <div class="cbody">
+      <svg class="chart" id="chart24" viewBox="0 0 360 170" preserveAspectRatio="none"></svg>
+      <div class="pill" id="chartPill">Tryk på en søjle for at se prisen.</div>
+      <div id="err24"></div>
+    </div>
+  </section>
+
+  <!-- LADEPLAN -->
+  <section class="card">
+    <div class="chead"><div class="ic">🔋</div>
+      <div><h2>Ladeblokke</h2><p>Blokkene frem mod deadline</p></div>
+      <div class="right" id="blocksCost">–</div></div>
+    <div class="cbody" id="blocks"><div class="empty">Ingen plan endnu.</div></div>
+  </section>
+
+  <!-- 7 DØGN -->
+  <section class="card">
+    <div class="chead"><div class="ic">▮</div>
+      <div><h2>Syv døgn</h2><p>Gennemsnitspris pr. døgn, inkl. moms</p></div></div>
+    <div class="cbody"><svg class="chart" id="chart7" viewBox="0 0 360 150" preserveAspectRatio="none"></svg></div>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <div class="chead"><div class="ic">⚙</div><div><h2>Indstillinger</h2><p>Bil, lader og faste afgifter</p></div></div>
+  <div class="cbody">
+    <label>Batteri (kWh)<select id="sBattery"><option value="58">58 (Standard)</option><option value="72.6">72,6</option><option value="77.4">77,4</option><option value="84" selected>84 (2025-)</option></select></label>
+    <label>Ladeeffekt (kW)<select id="sPower"><option value="3.7">3,7 (1 fase 16 A)</option><option value="7.4">7,4</option><option value="11" selected>11 (3 fase 16 A)</option></select></label>
+    <label>Ladetab (%)<input id="sLoss" type="number" value="10" min="0" max="30"></label>
+    <label>Gasel-tillæg (kr./kWh)<input id="sGasel" type="number" step="0.001" value="0.06"></label>
+    <label>Transport og system (kr./kWh)<input id="sTransport" type="number" step="0.001" value="0.125"></label>
+    <label>Elafgift (kr./kWh)<input id="sTax" type="number" step="0.001" value="0.73"></label>
+    <label>GitHub-repo (bruger/navn)<input id="sRepo" type="text" placeholder="dinbruger/ladeplan" style="text-align:left;width:170px"></label>
+    <label>GitHub-token<input id="sToken" type="password" placeholder="github_pat_…" style="text-align:left;width:170px"></label>
+    <p class="note" style="text-align:left;margin-top:8px">Token gemmes kun på denne telefon og bruges til at sende planen til GitHub, så scriptet kan styre laderen. Se OPSÆTNING.md.</p>
+  </div>
+  <div class="actions"><button class="btn" id="dlgClose">Luk</button><button class="btn primary" id="dlgSave">Gem</button></div>
+</dialog>
+
+<script>
+// ---------- opbevaring (gemmer i browseren når muligt) ----------
+const mem={};
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v==null?(k in mem?mem[k]:d):JSON.parse(v)}catch(e){return k in mem?mem[k]:d}},
+  set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const DAYS=['Man','Tir','Ons','Tor','Fre','Lør','Søn'];
+let settings=Object.assign({battery:84,power:11,loss:10,gasel:0.06,transport:0.125,tax:0.73,repo:'',token:''},store.get('settings',{}));
+let state=null; // seneste state.json fra scriptet
+let plan=store.get('plan',DAYS.map((d,i)=>({time:i<5?'07:00':'10:00',pct:80,on:true})));
+let soc=store.get('soc',45);
+let override=store.get('override',null); // {at:ms, pct}
+let manual=store.get('manual',null);     // {pct, since:ms}
+
+// ---------- hjælpere ----------
+const fmt=(n,d=2)=>n.toLocaleString('da-DK',{minimumFractionDigits:d,maximumFractionDigits:d});
+const hhmm=d=>d.toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'}).replace(':','.');
+const dayName=d=>['Søn','Man','Tir','Ons','Tor','Fre','Lør'][d.getDay()];
+const isoDate=d=>d.toISOString().slice(0,10);
+const isWinter=d=>{const m=d.getMonth()+1;return m>=10||m<=3};
+
+// Fallback-tarif (TREFOR El-net, C-kunde) hvis Energi Data Service ikke svarer. Skøn, ex moms.
+function fallbackTariff(d){
+  const h=d.getHours(),w=isWinter(d);
+  if(h<6)return w?0.13:0.13;
+  if(h<17)return w?0.39:0.19;
+  if(h<21)return w?1.16:0.51;
+  return w?0.39:0.19;
+}
+let tariffTable=null; // {winter:[24], summer:[24], source}
+function tariffAt(d){
+  if(tariffTable){const t=isWinter(d)?tariffTable.winter:tariffTable.summer;if(t&&t[d.getHours()]!=null)return t[d.getHours()]}
+  return fallbackTariff(d);
+}
+function fullPrice(spot,d){ // spot i kr/kWh, ex moms → alt inkl. moms
+  const ex=spot+settings.gasel+tariffAt(d)+settings.transport+settings.tax;
+  return ex*1.25;
+}
+
+// ---------- data fra Energi Data Service ----------
+let hours=[]; // [{t:Date, spot:kr/kWh}]
+async function fetchJSON(url){const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
+
+async function loadTariffs(){
+  try{
+    const f=encodeURIComponent(JSON.stringify({ChargeOwner:['TREFOR El-net A/S'],ChargeType:['D03']}));
+    const j=await fetchJSON(`https://api.energidataservice.dk/dataset/DatahubPricelist?filter=${f}&sort=ValidFrom%20desc&limit=40`);
+    const now=new Date();
+    // Find tidsdifferentierede net-tariffer (Price1..24 varierer) der gælder nu og i den anden sæson
+    const recs=(j.records||[]).filter(r=>{const p=[...Array(24)].map((_,i)=>r['Price'+(i+1)]);return p.some(x=>x!=null&&x!==p[0])});
+    const pick=(date)=>recs.find(r=>new Date(r.ValidFrom)<=date&&(!r.ValidTo||new Date(r.ValidTo)>date));
+    const cur=pick(now);
+    if(!cur)throw new Error('ingen aktuel tarif');
+    const other=pick(new Date(now.getFullYear(),now.getMonth()+6,1))||cur;
+    const arr=r=>[...Array(24)].map((_,i)=>Number(r['Price'+(i+1)]));
+    tariffTable=isWinter(now)?{winter:arr(cur),summer:arr(other)}:{winter:arr(other),summer:arr(cur)};
+    tariffTable.source=cur.Note||cur.ChargeTypeCode;
+    document.getElementById('tariffNote').innerHTML=`Nettarif: TREFOR El-net <span class="tag ok">live</span>`;
+  }catch(e){
+    document.getElementById('tariffNote').innerHTML=`Nettarif: TREFOR El-net <span class="tag">skøn – kunne ikke hentes</span>`;
+  }
+}
+
+async function loadPrices(){
+  const now=new Date();
+  const start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-7);
+  const end=new Date(now.getFullYear(),now.getMonth(),now.getDate()+2);
+  const f=encodeURIComponent(JSON.stringify({PriceArea:['DK1']}));
+  let recs;
+  try{ // 15-minutters day-ahead-priser (fra okt. 2025)
+    const j=await fetchJSON(`https://api.energidataservice.dk/dataset/DayAheadPrices?start=${isoDate(start)}&end=${isoDate(end)}&filter=${f}&sort=TimeDK%20asc&limit=0`);
+    recs=j.records.map(r=>({t:new Date(r.TimeDK),p:r.DayAheadPriceDKK/1000}));
+  }catch(e){ // ældre timedatasæt
+    const j=await fetchJSON(`https://api.energidataservice.dk/dataset/Elspotprices?start=${isoDate(start)}&end=${isoDate(end)}&filter=${f}&sort=HourDK%20asc&limit=0`);
+    recs=j.records.map(r=>({t:new Date(r.HourDK),p:r.SpotPriceDKK/1000}));
+  }
+  // saml til timer
+  const map=new Map();
+  for(const r of recs){const key=new Date(r.t.getFullYear(),r.t.getMonth(),r.t.getDate(),r.t.getHours()).getTime();
+    const m=map.get(key)||{s:0,n:0};m.s+=r.p;m.n++;map.set(key,m)}
+  hours=[...map.entries()].map(([k,v])=>({t:new Date(k),spot:v.s/v.n,est:false})).sort((a,b)=>a.t-b.t);
+  estimateAhead();
+}
+
+// Skøn for timer uden offentliggjort pris: gennemsnit af samme time de seneste 7 døgn,
+// justeret til gårsdagens/dagens niveau. Vises skraveret og markeret "skøn".
+function estimateAhead(){
+  const now=new Date();
+  const known=hours.filter(h=>!h.est);
+  if(!known.length)return;
+  const byHour=Array.from({length:24},()=>[]);
+  known.filter(h=>h.t<now).forEach(h=>byHour[h.t.getHours()].push(h.spot));
+  const avgH=byHour.map(a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null);
+  const overall=avgH.filter(x=>x!=null).reduce((a,b)=>a+b,0)/avgH.filter(x=>x!=null).length;
+  // niveau: seneste 24 kendte timer i forhold til 7-døgns-gennemsnittet
+  const last24=known.slice(-24);const lvl=last24.reduce((a,h)=>a+h.spot,0)/last24.length;
+  const shift=lvl-overall;
+  const lastKnown=known[known.length-1].t.getTime();
+  const horizon=new Date(now.getFullYear(),now.getMonth(),now.getDate()+2).getTime();
+  for(let t=lastKnown+3600000;t<horizon;t+=3600000){
+    const d=new Date(t);const base=avgH[d.getHours()]??overall;
+    hours.push({t:d,spot:base+shift*0.5,est:true});
+  }
+  hours.sort((a,b)=>a.t-b.t);
+}
+
+// ---------- ladeplan ----------
+function nextDeadline(){
+  const now=new Date();
+  if(override&&override.at>now.getTime())return {at:new Date(override.at),pct:override.pct,once:true};
+  if(override&&override.at<=now.getTime()){override=null;store.set('override',null)}
+  for(let add=0;add<8;add++){
+    const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()+add);
+    const idx=(d.getDay()+6)%7; const row=plan[idx]; if(!row.on)continue;
+    const [h,m]=row.time.split(':').map(Number); const dl=new Date(d); dl.setHours(h,m,0,0);
+    if(dl>now)return {at:dl,pct:row.pct};
+  }
+  return null;
+}
+function computePlan(){
+  const now=new Date();
+  const eff=1-settings.loss/100;
+  let dl=nextDeadline();
+  if(manual){ if(soc>=manual.pct){manual=null;store.set('manual',null)} else dl={at:new Date(now.getTime()+48*3600000),pct:manual.pct,manual:true} }
+  const needPct=dl?Math.max(0,dl.pct-soc):0;
+  const kwh=needPct/100*settings.battery/eff;
+  const hoursNeeded=kwh/settings.power;
+  const cand=hours.filter(h=>h.t.getTime()+3600000>now&&(!dl||h.t<dl.at)).map(h=>{
+    const start=new Date(Math.max(h.t,now)); const end=new Date(Math.min(h.t.getTime()+3600000,dl?dl.at:Infinity));
+    return {...h,start,end,frac:(end-start)/3600000,price:fullPrice(h.spot,h.t)};
+  }).filter(c=>c.frac>0.01);
+  // manuel: tag timerne i rækkefølge fra nu; ellers billigst først
+  const sorted=manual?[...cand].sort((a,b)=>a.start-b.start):[...cand].sort((a,b)=>a.price-b.price);
+  let left=hoursNeeded,chosen=[];
+  for(const c of sorted){if(left<=0)break;const use=Math.min(c.frac,left);chosen.push({...c,use});left-=use}
+  chosen.sort((a,b)=>a.start-b.start);
+  // slut/pris
+  let cost=0,done=null;
+  chosen.forEach(c=>{cost+=c.use*settings.power*c.price});
+  if(chosen.length){const last=chosen[chosen.length-1];done=new Date(last.start.getTime()+last.use*3600000)}
+  // blokke
+  const blocks=[];
+  for(const c of chosen){const b=blocks[blocks.length-1];
+    if(b&&Math.abs(b.end-c.start)<900000){b.end=new Date(c.start.getTime()+c.use*3600000);b.cost+=c.use*settings.power*c.price}
+    else blocks.push({start:c.start,end:new Date(c.start.getTime()+c.use*3600000),cost:c.use*settings.power*c.price})}
+  return {dl,kwh,hoursNeeded,chosen,cost,done,blocks,short:left>0.05,usesEst:chosen.some(c=>c.est)};
+}
+
+// ---------- render ----------
+function render(){
+  const now=new Date(); const P=computePlan();
+  document.getElementById('socNum').textContent=soc;
+  document.getElementById('socInput').value=soc;
+  document.getElementById('targetTxt').textContent=P.dl?P.dl.pct:'–';
+  document.getElementById('ringArc').setAttribute('stroke-dashoffset',515-515*soc/100);
+  document.getElementById('nuSub').textContent=manual?`Lader til ${manual.pct} % uanset pris`:P.dl?`Klar ${P.dl.at.getDate()===now.getDate()?'i dag':dayName(P.dl.at)} kl. ${hhmm(P.dl.at)}${P.dl.once?' (engangs)':''}`:'Ingen aktiv plan';
+  const charging=P.chosen.some(c=>c.start<=now&&c.end>now);
+  document.getElementById('nuState').textContent=P.kwh<=0?'Klar':manual?'Lader (manuelt)':charging?'Lader (plan)':'Venter';
+  document.getElementById('ringLabel').textContent=P.kwh<=0?'Mål nået':manual?'Manuel ladning kører':charging?'Planen siger lad nu':P.chosen[0]?`Starter kl. ${hhmm(P.chosen[0].start)}`:'Ingen timer i planen';
+  const stop=document.getElementById('btnStop');stop.disabled=!manual;
+  document.getElementById('stopNote').textContent=manual?'Stopper den manuelle ladning og går tilbage til planen.':'Zaptec er ikke tilkoblet endnu. Når den er, tænder og slukker laderen efter blokkene herunder.';
+  const ob=document.getElementById('overrideBadge');
+  ob.innerHTML=manual?`<div class="badge on">▶ Manuel ladning til ${manual.pct} % · <a href="#" id="clrManual" style="color:inherit">stop</a></div>`
+    :override?`<div class="badge on">Engangsmål: ${override.pct} % ${new Date(override.at).getDate()===now.getDate()?'i dag':'i morgen'} kl. ${hhmm(new Date(override.at))} · <a href="#" id="clrOverride" style="color:inherit">fjern</a></div>`:'';
+  document.getElementById('btnManual').textContent=manual?'Lader manuelt…':'Start ladning nu';
+  document.getElementById('btnManual').disabled=!!manual;
+  document.getElementById('kwhNeeded').textContent=fmt(P.kwh,1)+' kWh';
+  const hN=Math.floor(P.hoursNeeded),mN=Math.round((P.hoursNeeded-hN)*60);
+  document.getElementById('chargeTime').textContent=P.kwh>0?`${hN} t. ${mN} min.`:'0 min.';
+  document.getElementById('doneAt').textContent=P.done?`kl. ${hhmm(P.done)}`:'–';
+  document.getElementById('planCost').textContent=P.kwh>0?fmt(P.cost)+' kr.':'0,00 kr.';
+  document.getElementById('blocksCost').textContent=fmt(P.cost)+' kr.';
+
+  // plan-rækker
+  const pr=document.getElementById('planRows'); pr.innerHTML='';
+  plan.forEach((r,i)=>{const el=document.createElement('div');el.className='plan-row';
+    el.innerHTML=`<span class="d">${DAYS[i]}</span><input type="time" value="${r.time}" data-i="${i}">
+      <select data-i="${i}">${[50,60,70,80,90,100].map(p=>`<option ${p===r.pct?'selected':''}>${p} %</option>`).join('')}</select>
+      <button class="tog" role="switch" aria-checked="${r.on}" data-i="${i}" aria-label="${DAYS[i]} til/fra"></button>`;
+    pr.appendChild(el)});
+
+  // pris nu
+  const cur=hours.find(h=>h.t<=now&&h.t.getTime()+3600000>now);
+  const bd=document.getElementById('breakdown');
+  if(cur){const tar=tariffAt(now);const ex=cur.spot+settings.gasel+tar+settings.transport+settings.tax;
+    document.getElementById('priceNow').textContent=fmt(ex*1.25);
+    bd.innerHTML=[['Spotpris (DK1)',cur.spot],['Gasel-tillæg',settings.gasel],['Nettarif (TREFOR)',tar],['Transport og system',settings.transport],['Elafgift',settings.tax],['Moms',ex*0.25]]
+      .map(([k,v])=>`<div class="row"><span class="k">${k}</span><span class="v">${fmt(v,3)}</span></div>`).join('')+
+      `<div class="row total"><span class="k">I alt</span><span class="v">${fmt(ex*1.25,3)}</span></div>`}
+  else{document.getElementById('priceNow').textContent='–';bd.innerHTML='<div class="empty">Ingen pris for denne time.</div>'}
+
+  // blokke
+  const bl=document.getElementById('blocks');
+  if(!P.blocks.length)bl.innerHTML=`<div class="empty">${P.kwh<=0?'Bilen er allerede på mål.':'Ingen timer at planlægge i.'}</div>`;
+  else bl.innerHTML=P.blocks.map(b=>`<div class="block">${hhmm(b.start)} – ${hhmm(b.end)}${b.start.getDate()!==now.getDate()?' <span class="d" style="color:var(--muted);font-weight:500">'+dayName(b.start)+'</span>':''}<span class="r">${b.start<=now&&b.end>now?'Nu':fmt(b.cost)+' kr.'}</span></div>`).join('')+
+    (P.usesEst?`<p class="note">Nogle af timerne bygger på et prisskøn (skraveret i grafen). Planen justeres automatisk, når de rigtige priser kommer ca. kl. 13.</p>`:'')+
+    (P.short?`<p class="note">Der er ikke timer nok inden deadline til at nå målet – flyt tidspunktet eller sænk målet.</p>`:'');
+
+  draw24(P); draw7();
+}
+
+function draw24(P){
+  const svg=document.getElementById('chart24'); const now=new Date();
+  const from=new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours());
+  const data=hours.filter(h=>h.t>=from&&h.t<from.getTime()+24*3600000).map(h=>({...h,price:fullPrice(h.spot,h.t)}));
+  if(!data.length){svg.innerHTML='';document.getElementById('err24').innerHTML='<div class="err">Kunne ikke hente priser fra Energi Data Service. Tjek forbindelsen og tryk ↻.</div>';return}
+  document.getElementById('err24').innerHTML='';
+  const W=360,H=170,pad={l:26,r:4,t:8,b:22};const max=Math.max(0.5,...data.map(d=>d.price));const min=Math.min(0,...data.map(d=>d.price));
+  const y=v=>pad.t+(H-pad.t-pad.b)*(1-(v-min)/(max-min));const bw=(W-pad.l-pad.r)/24;
+  const planKeys=new Set(P.chosen.map(c=>c.t.getTime()));
+  let s=`<defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#CBDAD7" stroke-width="2.5"/></pattern>
+    <pattern id="hatchT" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#0E8F80" stroke-width="2.5"/></pattern></defs>
+    <line x1="${pad.l}" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="#E3ECEA"/>`;
+  [min,(min+max)/2,max].forEach(v=>{s+=`<text x="0" y="${y(v)+3}">${fmt(v,1)}</text>`});
+  const firstEst=data.findIndex(d=>d.est);
+  if(firstEst>0){const x=pad.l+firstEst*bw;s+=`<line x1="${x}" x2="${x}" y1="${pad.t}" y2="${H-pad.b}" stroke="#9FB5B2" stroke-dasharray="3 3"/><text x="${x+3}" y="${pad.t+9}">skøn →</text>`}
+  data.forEach((d,i)=>{const x=pad.l+i*bw+1.5;const h=Math.abs(y(d.price)-y(0));
+    const cls=['b',planKeys.has(d.t.getTime())?'plan':'',d.t.getTime()===from.getTime()?'now':'',d.price<0?'neg':'',d.est?'est':''].join(' ');
+    s+=`<rect class="${cls}" data-i="${i}" x="${x}" y="${Math.min(y(d.price),y(0))}" width="${bw-3}" height="${Math.max(2,h)}" rx="2"/>`;
+    if(i%3===0||i===0)s+=`<text class="${i===0?'now':''}" x="${x+(bw-3)/2}" y="${H-6}" text-anchor="middle">${String(d.t.getHours()).padStart(2,'0')}</text>`});
+  svg.innerHTML=s;
+  svg.onclick=e=>{const r=e.target.closest('rect.b');if(!r)return;const d=data[+r.dataset.i];
+    document.getElementById('chartPill').innerHTML=`Kl. <b>${String(d.t.getHours()).padStart(2,'0')}</b> ${d.t.getDate()!==now.getDate()?dayName(d.t)+' ':''}koster strømmen ${d.est?'<i>anslået</i> ':''}<b>${fmt(d.price)} kr./kWh</b> (spot ${fmt(d.spot,3)})`};
+  const cheapest=[...data].sort((a,b)=>a.price-b.price)[0],dearest=[...data].sort((a,b)=>b.price-a.price)[0];
+  document.getElementById('chartPill').innerHTML=`Billigst kl. <b>${String(cheapest.t.getHours()).padStart(2,'0')}</b> (${fmt(cheapest.price)} kr.) · dyrest kl. <b>${String(dearest.t.getHours()).padStart(2,'0')}</b> (${fmt(dearest.price)} kr.). Tryk på en søjle for detaljer.`;
+}
+
+function draw7(){
+  const svg=document.getElementById('chart7');const now=new Date();const days=[];
+  for(let i=6;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);const hs=hours.filter(h=>h.t.getDate()===d.getDate()&&h.t.getMonth()===d.getMonth());
+    if(hs.length)days.push({d,avg:hs.reduce((a,h)=>a+fullPrice(h.spot,h.t),0)/hs.length})}
+  if(!days.length){svg.innerHTML='';return}
+  const W=360,H=150,pad={l:26,r:4,t:8,b:22};const max=Math.max(0.5,...days.map(x=>x.avg));const y=v=>pad.t+(H-pad.t-pad.b)*(1-v/max);const bw=(W-pad.l-pad.r)/days.length;
+  let s=`<text x="0" y="${y(max)+3}">${fmt(max,1)}</text><text x="0" y="${y(0)+3}">0,0</text>`;
+  days.forEach((x,i)=>{const px=pad.l+i*bw+6;s+=`<rect class="b ${i===days.length-1?'plan':''}" x="${px}" y="${y(x.avg)}" width="${bw-12}" height="${y(0)-y(x.avg)}" rx="3"/>
+    <text x="${px+(bw-12)/2}" y="${y(x.avg)-4}" text-anchor="middle">${fmt(x.avg)}</text><text x="${px+(bw-12)/2}" y="${H-6}" text-anchor="middle">${dayName(x.d)}</text>`});
+  svg.innerHTML=s;
+}
+
+// ---------- events ----------
+document.getElementById('planRows').addEventListener('input',e=>{const i=+e.target.dataset.i;if(isNaN(i))return;
+  if(e.target.type==='time')plan[i].time=e.target.value;else plan[i].pct=parseInt(e.target.value);store.set('plan',plan);render();syncPlan()});
+document.getElementById('planRows').addEventListener('click',e=>{const t=e.target.closest('.tog');if(!t)return;
+  plan[+t.dataset.i].on=!plan[+t.dataset.i].on;store.set('plan',plan);render();syncPlan()});
+document.getElementById('socInput').addEventListener('change',e=>{soc=Math.max(0,Math.min(100,+e.target.value||0));store.set('soc',soc);render();syncPlan()});
+document.getElementById('btnRefresh').addEventListener('click',boot);
+document.getElementById('btnOverride').addEventListener('click',()=>{
+  const now=new Date();const [h,m]=oTime.value.split(':').map(Number);
+  const at=new Date(now.getFullYear(),now.getMonth(),now.getDate()+ +oDay.value,h,m);
+  if(at<=now){alert('Tidspunktet er allerede passeret – vælg et senere tidspunkt eller "I morgen".');return}
+  override={at:at.getTime(),pct:parseInt(oPct.value)};manual=null;
+  store.set('override',override);store.set('manual',null);render();syncPlan(true)});
+document.getElementById('btnManual').addEventListener('click',()=>{
+  manual={pct:parseInt(oPct.value),since:Date.now()};store.set('manual',manual);render();syncPlan(true)});
+document.getElementById('btnStop').addEventListener('click',()=>{manual=null;store.set('manual',null);render();syncPlan(true)});
+document.addEventListener('click',e=>{
+  if(e.target.id==='clrManual'){e.preventDefault();manual=null;store.set('manual',null);render();syncPlan(true)}
+  if(e.target.id==='clrOverride'){e.preventDefault();override=null;store.set('override',null);render();syncPlan(true)}});
+const dlg=document.getElementById('dlg');
+document.getElementById('btnSettings').addEventListener('click',()=>{
+  sBattery.value=settings.battery;sPower.value=settings.power;sLoss.value=settings.loss;sGasel.value=settings.gasel;sTransport.value=settings.transport;sTax.value=settings.tax;sRepo.value=settings.repo||'';sToken.value=settings.token||'';dlg.showModal()});
+document.getElementById('dlgClose').addEventListener('click',()=>dlg.close());
+document.getElementById('dlgSave').addEventListener('click',()=>{
+  settings={battery:+sBattery.value,power:+sPower.value,loss:+sLoss.value,gasel:+sGasel.value,transport:+sTransport.value,tax:+sTax.value,repo:sRepo.value.trim(),token:sToken.value.trim()};
+  store.set('settings',settings);dlg.close();render();syncPlan()});
+
+// ---------- state.json fra scriptet (batteri-% via Bluelink, Zaptec-status) ----------
+async function loadState(){
+  try{
+    const r=await fetch('state.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;
+    state=await r.json();
+    if(state.soc!=null&&state.soc_updated){soc=state.soc;store.set('soc',soc)}
+  }catch(e){state=null}
+}
+function renderState(){
+  const tag=document.getElementById('socTag'),zap=document.getElementById('zapState');
+  if(state&&state.soc_updated){const d=new Date(state.soc_updated);tag.textContent='Bluelink kl. '+hhmm(d);tag.className='tag ok'}
+  else{tag.textContent='manuelt';tag.className='tag'}
+  if(state&&state.charger){const c=state.charger;
+    zap.textContent=c.error?'Fejl: '+c.error:(c.plugged===false?'Bil ikke tilsluttet':c.charging?'Lader ('+(c.power_kw!=null?fmt(c.power_kw,1)+' kW':'aktiv')+')':'Pause')}
+  else zap.textContent='Ikke tilkoblet';
+  const note=document.getElementById('stopNote');
+  if(state&&state.charger&&!state.charger.error)note.textContent=manual?'Stopper den manuelle ladning og går tilbage til planen.':'Zaptec styres automatisk efter blokkene herunder. Sidst tjekket kl. '+hhmm(new Date(state.updated));
+}
+
+// ---------- send planen til GitHub, så scriptet kan handle på den ----------
+let syncTimer=null;
+function syncPlan(immediate){
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(doSync,immediate?200:1500);
+}
+async function doSync(){
+  const st=document.getElementById('syncStatus');
+  if(!settings.repo||!settings.token){st.textContent='';return}
+  const body={plan,override,manual,soc_manual:{soc,at:Date.now()},
+    settings:{battery:settings.battery,power:settings.power,loss:settings.loss,gasel:settings.gasel,transport:settings.transport,tax:settings.tax},updated:new Date().toISOString()};
+  const api=`https://api.github.com/repos/${settings.repo}/contents/plan.json`;
+  const H={Authorization:'Bearer '+settings.token,Accept:'application/vnd.github+json','Content-Type':'application/json'};
+  try{
+    st.textContent='Sender plan til GitHub…';
+    let sha;try{const g=await fetch(api,{headers:H});if(g.ok)sha=(await g.json()).sha}catch(e){}
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(body,null,2))));
+    const r=await fetch(api,{method:'PUT',headers:H,body:JSON.stringify({message:'Opdater plan fra app',content,sha})});
+    if(!r.ok)throw new Error('GitHub svarede '+r.status);
+    // kør scriptet nu i stedet for at vente på næste kvarter
+    await fetch(`https://api.github.com/repos/${settings.repo}/actions/workflows/charge.yml/dispatches`,{method:'POST',headers:H,body:JSON.stringify({ref:'main'})}).catch(()=>{});
+    st.textContent='Plan sendt kl. '+hhmm(new Date())+' – laderen følger den inden for et par minutter.';
+  }catch(e){st.textContent='Kunne ikke sende planen: '+e.message+'. Tjek repo og token under ⚙.'}
+}
+
+async function boot(){
+  document.getElementById('nuState').textContent='Henter priser…';
+  await Promise.all([loadTariffs(),loadPrices().catch(()=>{hours=[]}),loadState()]);
+  render();renderState();
+}
+setInterval(()=>{loadState().then(()=>{render();renderState()})},5*60000);
+boot();
+setInterval(render,60000);
+</script>
+</body>
+</html>

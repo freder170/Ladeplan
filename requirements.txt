@@ -1,0 +1,2 @@
+requests>=2.31
+hyundai_kia_connect_api>=3.30

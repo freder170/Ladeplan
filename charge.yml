@@ -1,0 +1,38 @@
+name: Ladeplan
+on:
+  schedule:
+    - cron: "*/15 * * * *"     # hvert kvarter (GitHub kan forsinke få minutter)
+  workflow_dispatch:           # appen kan starte en kørsel med det samme
+permissions:
+  contents: write
+concurrency:
+  group: ladeplan
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Kør ladeplan
+        env:
+          ZAPTEC_USER: ${{ secrets.ZAPTEC_USER }}
+          ZAPTEC_PASSWORD: ${{ secrets.ZAPTEC_PASSWORD }}
+          ZAPTEC_CHARGER_ID: ${{ secrets.ZAPTEC_CHARGER_ID }}
+          BLUELINK_USER: ${{ secrets.BLUELINK_USER }}
+          BLUELINK_PASSWORD: ${{ secrets.BLUELINK_PASSWORD }}
+          BLUELINK_PIN: ${{ secrets.BLUELINK_PIN }}
+        run: python charge.py
+      - name: Gem state.json
+        run: |
+          git config user.name "ladeplan-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git pull --rebase --autostash || true
+          git add state.json plan.json
+          git diff --cached --quiet || git commit -m "Opdater status $(date -u +%H:%M)"
+          git push
