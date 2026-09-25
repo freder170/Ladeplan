@@ -3,44 +3,44 @@
     {
       "time": "07:00",
       "pct": 80,
-      "on": false
+      "on": true
     },
     {
       "time": "07:00",
       "pct": 80,
-      "on": false
+      "on": true
     },
     {
       "time": "07:00",
       "pct": 80,
-      "on": false
+      "on": true
     },
     {
       "time": "07:00",
       "pct": 80,
-      "on": false
+      "on": true
     },
     {
       "time": "07:00",
       "pct": 80,
-      "on": false
+      "on": true
     },
     {
       "time": "10:00",
       "pct": 80,
-      "on": false
+      "on": true
     },
     {
       "time": "10:00",
       "pct": 80,
-      "on": false
+      "on": true
     }
   ],
   "override": null,
   "manual": null,
   "soc_manual": {
     "soc": 49.5,
-    "at": 1790348948817
+    "at": 1790349075181
   },
   "settings": {
     "battery": 84,
@@ -50,5 +50,5 @@
     "transport": 0.125,
     "tax": 0.73
   },
-  "updated": "2026-09-25T15:09:08.817Z"
+  "updated": "2026-09-25T15:11:15.181Z"
 }
