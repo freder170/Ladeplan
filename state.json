@@ -1,31 +1,31 @@
 {
-  "updated": "2026-10-10T00:19:41.715393+02:00",
-  "soc": 39.5,
-  "soc_updated": "2026-10-10T00:19:41.715393+02:00",
+  "updated": "2026-10-10T00:45:45.565013+02:00",
+  "soc": 42.5,
+  "soc_updated": "2026-10-10T00:45:45.565013+02:00",
   "car_plugged": true,
-  "car_charging": false,
+  "car_charging": true,
   "charger": {
     "name": "Messi Zaptec",
     "id": "a0b3226b-9d90-4854-97f2-ae3394e51b83",
-    "mode": 5,
+    "mode": 3,
     "plugged": true,
-    "charging": false,
-    "power_kw": 0.0,
+    "charging": true,
+    "power_kw": 9.684973,
     "error": null
   },
-  "action": "startet",
+  "action": "uændret",
   "plan": {
     "charge_now": true,
     "reason": "engangs",
-    "need_kwh": 56.5,
+    "need_kwh": 53.7,
     "target": 100,
     "deadline": "2026-10-10T17:00:00+02:00",
     "short": false,
-    "cost": 24.43,
+    "cost": 23.26,
     "blocks": [
       {
-        "start": "2026-10-10T00:19:41.715393+02:00",
-        "end": "2026-10-10T04:27:41.715393+02:00"
+        "start": "2026-10-10T00:45:45.565013+02:00",
+        "end": "2026-10-10T04:38:29.201377+02:00"
       },
       {
         "start": "2026-10-10T05:00:00+02:00",
