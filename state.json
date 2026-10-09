@@ -1,12 +1,19 @@
 {
+<<<<<<< Updated upstream
   "updated": "2026-10-09T18:47:40.402829+02:00",
   "soc": 39.5,
   "soc_updated": "2026-10-09T18:47:40.402829+02:00",
+=======
+  "updated": "2026-10-09T18:48:11.101895+02:00",
+  "soc": 39.5,
+  "soc_updated": "2026-10-09T18:48:11.101895+02:00",
+>>>>>>> Stashed changes
   "car_plugged": true,
   "car_charging": true,
   "charger": {
     "name": "Messi Zaptec",
     "id": "a0b3226b-9d90-4854-97f2-ae3394e51b83",
+<<<<<<< Updated upstream
     "mode": 3,
     "plugged": true,
     "charging": true,
@@ -14,11 +21,34 @@
     "error": null
   },
   "action": "stoppet",
+=======
+    "mode": 5,
+    "plugged": true,
+    "charging": false,
+    "power_kw": 0.0,
+    "error": null
+  },
+  "action": "uændret",
+>>>>>>> Stashed changes
   "plan": {
     "charge_now": false,
-    "reason": "ingen plan",
-    "blocks": [],
-    "deadline": null
+    "reason": "engangs",
+    "need_kwh": 37.8,
+    "target": 80,
+    "deadline": "2026-10-10T17:00:00+02:00",
+    "short": false,
+    "cost": 16.22,
+    "blocks": [
+      {
+        "start": "2026-10-10T00:00:00+02:00",
+        "end": "2026-10-10T02:26:10.909091+02:00"
+      },
+      {
+        "start": "2026-10-10T05:00:00+02:00",
+        "end": "2026-10-10T06:00:00+02:00"
+      }
+    ],
+    "manual_cleared": false
   },
   "tariff_source": "skøn",
   "hours": [
