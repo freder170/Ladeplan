@@ -1,7 +1,7 @@
 {
-  "updated": "2026-10-10T01:13:49.478348+02:00",
-  "soc": 47,
-  "soc_updated": "2026-10-10T01:13:49.478348+02:00",
+  "updated": "2026-10-10T01:33:28.490409+02:00",
+  "soc": 50.5,
+  "soc_updated": "2026-10-10T01:33:28.490409+02:00",
   "car_plugged": true,
   "car_charging": true,
   "charger": {
@@ -10,25 +10,21 @@
     "mode": 3,
     "plugged": true,
     "charging": true,
-    "power_kw": 9.684973,
+    "power_kw": 9.881615,
     "error": null
   },
   "action": "uændret",
   "plan": {
     "charge_now": true,
     "reason": "engangs",
-    "need_kwh": 49.5,
+    "need_kwh": 46.2,
     "target": 100,
     "deadline": "2026-10-10T17:00:00+02:00",
     "short": false,
-    "cost": 21.48,
+    "cost": 20.09,
     "blocks": [
       {
-        "start": "2026-10-10T01:13:49.478348+02:00",
-        "end": "2026-10-10T04:43:38.569257+02:00"
-      },
-      {
-        "start": "2026-10-10T05:00:00+02:00",
+        "start": "2026-10-10T01:33:28.490409+02:00",
         "end": "2026-10-10T06:00:00+02:00"
       }
     ],
