@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-10T14:13:13.757186+02:00",
-  "soc": 39.0,
-  "soc_updated": "2026-10-10T14:13:13.757186+02:00",
+  "updated": "2026-10-10T14:14:56.846085+02:00",
+  "soc": 100.0,
+  "soc_updated": "2026-10-10T14:14:56.846085+02:00",
   "soc_source": "zaptec",
   "soc_est": {
-    "base_soc": 39.0,
-    "base_at": 1791564736760,
+    "base_soc": 100.0,
+    "base_at": 1791634485908,
     "kwh": 0.0,
     "last_session_kwh": 55.606
   },
@@ -19,23 +19,18 @@
     "charging": false,
     "power_kw": 0.0,
     "session_kwh": 55.606,
-    "error": "500 Server Error: Internal Server Error for url: https://api.zaptec.com/api/chargers/a0b3226b-9d90-4854-97f2-ae3394e51b8"
+    "error": null
   },
-  "action": null,
+  "action": "uændret",
   "plan": {
-    "charge_now": true,
+    "charge_now": false,
     "reason": "engangs",
-    "need_kwh": 56.9,
+    "need_kwh": 0.0,
     "target": 100,
     "deadline": "2026-10-10T17:00:00+02:00",
-    "short": true,
-    "cost": 20.84,
-    "blocks": [
-      {
-        "start": "2026-10-10T14:13:13.757186+02:00",
-        "end": "2026-10-10T17:00:00+02:00"
-      }
-    ],
+    "short": false,
+    "cost": 0,
+    "blocks": [],
     "manual_cleared": false
   },
   "tariff_source": "skøn",
