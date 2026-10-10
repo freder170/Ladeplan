@@ -483,8 +483,9 @@ async function loadState(){
 }
 function renderState(){
   const tag=document.getElementById('socTag'),zap=document.getElementById('zapState');
-  if(state&&state.soc_updated){const d=new Date(state.soc_updated);tag.textContent='Bluelink kl. '+hhmm(d);tag.className='tag ok'}
-  else{tag.textContent='manuelt';tag.className='tag'}
+  if(state&&state.soc_source==='zaptec'){tag.textContent='beregnet fra Zaptec · tast % når du sætter bilen til';tag.className='tag ok'}
+  else if(state&&state.soc_source==='bluelink'){tag.textContent='Bluelink kl. '+hhmm(new Date(state.soc_updated));tag.className='tag ok'}
+  else{tag.textContent='tast % fra bilens display';tag.className='tag'}
   if(state&&state.charger){const c=state.charger;
     zap.textContent=c.error?'Fejl: '+c.error:(c.plugged===false?'Bil ikke tilsluttet':c.charging?'Lader ('+(c.power_kw!=null?fmt(c.power_kw,1)+' kW':'aktiv')+')':'Pause')}
   else zap.textContent='Ikke tilkoblet';

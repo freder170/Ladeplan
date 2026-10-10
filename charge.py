@@ -134,7 +134,9 @@ def full_price(spot, d, S, tariffs):
 def read_soc(prev_state):
     """Returnerer (soc, plugged, charging, updated_iso) eller (None,...) hvis ikke sat op."""
     user, pw, pin = os.getenv("BLUELINK_USER"), os.getenv("BLUELINK_PASSWORD"), os.getenv("BLUELINK_PIN", "")
-    if not user or not pw:
+    # Bluelink er slået fra som standard (Hyundais servere smider app-sessionen ud ved parallelle logins).
+    # Sæt secret BLUELINK_ENABLED=ja for at bruge det alligevel.
+    if os.getenv("BLUELINK_ENABLED", "").lower() not in ("ja", "yes", "true", "1") or not user or not pw:
         return None, None, None, None
     try:
         from hyundai_kia_connect_api import VehicleManager
@@ -188,7 +190,8 @@ class Zaptec:
         obs = {o["StateId"]: o.get("ValueAsString") for o in r.json()}
         mode = int(obs.get(710) or 0)   # 1 frakoblet, 2 tilsluttet/venter, 3 lader, 5 tilsluttet/færdig-pauset
         power = float(obs.get(513) or 0) / 1000 if obs.get(513) else None  # TotalChargePower W
-        return {"mode": mode, "plugged": mode != 1 if mode else None, "charging": mode == 3, "power_kw": power}
+        session_kwh = float(obs[553]) if obs.get(553) not in (None, "") else None  # TotalChargePowerSession kWh
+        return {"mode": mode, "plugged": mode != 1 if mode else None, "charging": mode == 3, "power_kw": power, "session_kwh": session_kwh}
 
     def command(self, cid, cmd):
         r = requests.post(f"{self.BASE}/api/chargers/{cid}/sendCommand/{cmd}", headers=self._h(), timeout=20)
@@ -270,41 +273,73 @@ def main():
             json.dump(prev, f, ensure_ascii=False, indent=2, default=str)
         return
 
-    soc, plugged, car_charging, soc_updated = read_soc(prev)
-    if soc is None:  # fald tilbage til det, brugeren har tastet i appen
-        sm = P.get("soc_manual") or {}
-        soc = sm.get("soc", prev.get("soc"))
-        soc_updated = None
-        log(f"Bruger manuel batteri-%: {soc}")
-
-    result = compute(P, soc, hours, tariffs)
-    log(f"Plan: {result['reason']} → lad nu = {result['charge_now']}  blokke = {len(result['blocks'])}")
-
-    charger_state = {"error": "Zaptec ikke sat op"}
-    action = None
+    # --- Zaptec: læs status først (bruges både til batteri-skøn og styring)
     z = Zaptec()
+    charger_state, st, cid = {"error": "Zaptec ikke sat op"}, None, None
     if z.enabled():
         try:
             z.login()
-            c = z.charger()
-            st = z.state(c["Id"])
-            charger_state = {"name": c.get("Name"), "id": c["Id"], **st, "error": None}
-            if st["plugged"] is False:
-                action = "bil ikke tilsluttet"
-            elif result["charge_now"] and not st["charging"]:
-                z.command(c["Id"], Zaptec.CMD_RESUME); action = "startet"
-            elif not result["charge_now"] and st["charging"]:
-                z.command(c["Id"], Zaptec.CMD_STOP); action = "stoppet"
-            else:
-                action = "uændret"
-            log("Zaptec:", charger_state, "→", action)
+            c = z.charger(); cid = c["Id"]
+            st = z.state(cid)
+            charger_state = {"name": c.get("Name"), "id": cid, **st, "error": None}
         except Exception as e:
             charger_state = {"error": str(e)[:120]}
             log("Zaptec fejlede:", e)
 
+    # --- Batteri-%: Bluelink hvis slået til, ellers skøn = indtastet % + kWh målt af Zaptec
+    soc, plugged, car_charging, soc_updated = read_soc(prev)
+    soc_source = "bluelink" if soc is not None else None
+    est = dict(prev.get("soc_est") or {})
+    sm = P.get("soc_manual") or {}
+    if sm.get("at") and sm.get("at") != est.get("base_at"):   # ny indtastning i appen → nyt udgangspunkt
+        est = {"base_soc": float(sm["soc"]), "base_at": sm["at"], "kwh": 0.0, "last_session_kwh": None}
+        log(f"Nyt udgangspunkt fra appen: {sm['soc']} %")
+    if est.get("base_soc") is not None and st:
+        prev_t = prev.get("updated")
+        mins = (NOW - dt.datetime.fromisoformat(prev_t)).total_seconds() / 60 if prev_t else 0
+        sk, last = st.get("session_kwh"), est.get("last_session_kwh")
+        if sk is not None:
+            if last is not None:
+                est["kwh"] += (sk - last) if sk >= last else sk   # faldt tælleren, er det en ny session
+            est["last_session_kwh"] = sk
+        elif st.get("charging") and st.get("power_kw") and 0 < mins < 60:
+            est["kwh"] += st["power_kw"] * mins / 60               # fallback: effekt × tid
+        if st.get("plugged") is False:
+            plugged = False
+    if soc is None and est.get("base_soc") is not None:
+        S = P["settings"]
+        soc = min(100.0, round(est["base_soc"] + est["kwh"] * (1 - S["loss"] / 100) / S["battery"] * 100, 1))
+        soc_source = "zaptec"
+        soc_updated = NOW.isoformat()
+        log(f"Batteri-skøn: {est['base_soc']} % + {est['kwh']:.1f} kWh → {soc} %")
+    elif soc is None:
+        soc = prev.get("soc"); soc_source = "ukendt"
+        log("Ingen batteri-% – tast den i appen, når bilen sættes til")
+
+    result = compute(P, soc, hours, tariffs)
+    log(f"Plan: {result['reason']} → lad nu = {result['charge_now']}  blokke = {len(result['blocks'])}")
+
+    # --- Zaptec: tænd/sluk hvis nødvendigt
+    action = None
+    if st is not None:
+        try:
+            if st["plugged"] is False:
+                action = "bil ikke tilsluttet"
+            elif result["charge_now"] and not st["charging"]:
+                z.command(cid, Zaptec.CMD_RESUME); action = "startet"
+            elif not result["charge_now"] and st["charging"]:
+                z.command(cid, Zaptec.CMD_STOP); action = "stoppet"
+            else:
+                action = "uændret"
+            log("Zaptec:", charger_state, "→", action)
+        except Exception as e:
+            charger_state["error"] = str(e)[:120]
+            log("Zaptec-kommando fejlede:", e)
+
     state = {
         "updated": NOW.isoformat(),
-        "soc": soc, "soc_updated": soc_updated, "car_plugged": plugged, "car_charging": car_charging,
+        "soc": soc, "soc_updated": soc_updated, "soc_source": soc_source, "soc_est": est,
+        "car_plugged": plugged, "car_charging": car_charging,
         "charger": charger_state, "action": action,
         "plan": result,
         "tariff_source": "TREFOR El-net (live)" if tariffs else "skøn",
