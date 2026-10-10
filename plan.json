@@ -42,8 +42,8 @@
   },
   "manual": null,
   "soc_manual": {
-    "soc": 39,
-    "at": 1791564736760
+    "soc": 100,
+    "at": 1791634485908
   },
   "settings": {
     "battery": 84,
@@ -53,5 +53,5 @@
     "transport": 0.05,
     "tax": 0
   },
-  "updated": "2026-10-09T16:52:16.760Z"
+  "updated": "2026-10-10T12:14:45.908Z"
 }
