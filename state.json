@@ -1,7 +1,7 @@
 {
-  "updated": "2026-10-10T16:56:24.220925+02:00",
+  "updated": "2026-10-10T17:16:01.860215+02:00",
   "soc": 100.0,
-  "soc_updated": "2026-10-10T16:56:24.220925+02:00",
+  "soc_updated": "2026-10-10T17:16:01.860215+02:00",
   "soc_source": "zaptec",
   "soc_est": {
     "base_soc": 100.0,
@@ -24,14 +24,9 @@
   "action": "uændret",
   "plan": {
     "charge_now": false,
-    "reason": "engangs",
-    "need_kwh": 0.0,
-    "target": 100,
-    "deadline": "2026-10-10T17:00:00+02:00",
-    "short": false,
-    "cost": 0,
+    "reason": "ingen plan",
     "blocks": [],
-    "manual_cleared": false
+    "deadline": null
   },
   "tariff_source": "skøn",
   "hours": [
