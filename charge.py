@@ -197,6 +197,18 @@ class Zaptec:
         r = requests.post(f"{self.BASE}/api/chargers/{cid}/sendCommand/{cmd}", headers=self._h(), timeout=20)
         r.raise_for_status()
 
+    def start(self, cid):
+        """Prøver i rækkefølge: genoptag (507) → godkend session → start (501). Returnerer hvad der virkede."""
+        tried = []
+        for name, fn in (("genoptag", lambda: self.command(cid, self.CMD_RESUME)),
+                         ("godkend", lambda: requests.post(f"{self.BASE}/api/chargers/{cid}/authorizecharge", headers=self._h(), timeout=20).raise_for_status()),
+                         ("start", lambda: self.command(cid, 501))):
+            try:
+                fn(); return name
+            except Exception as e:
+                tried.append(f"{name}: {str(e)[:60]}")
+        raise RuntimeError(" | ".join(tried))
+
 
 # ---------------------------------------------------------------- ladeplan
 def next_deadline(P):
@@ -282,6 +294,8 @@ def main():
             c = z.charger(); cid = c["Id"]
             st = z.state(cid)
             charger_state = {"name": c.get("Name"), "id": cid, **st, "error": None}
+            log("Zaptec-status:", {k: st.get(k) for k in ("mode", "plugged", "charging", "power_kw", "session_kwh")},
+                "(mode 1=frakoblet, 2=tilsluttet/venter, 3=lader, 5=tilsluttet/pauset)")
         except Exception as e:
             charger_state = {"error": str(e)[:120]}
             log("Zaptec fejlede:", e)
@@ -326,12 +340,12 @@ def main():
             if st["plugged"] is False:
                 action = "bil ikke tilsluttet"
             elif result["charge_now"] and not st["charging"]:
-                z.command(cid, Zaptec.CMD_RESUME); action = "startet"
+                action = "startet (" + z.start(cid) + ")"
             elif not result["charge_now"] and st["charging"]:
                 z.command(cid, Zaptec.CMD_STOP); action = "stoppet"
             else:
                 action = "uændret"
-            log("Zaptec:", charger_state, "→", action)
+            log("Zaptec →", action)
         except Exception as e:
             charger_state["error"] = str(e)[:120]
             log("Zaptec-kommando fejlede:", e)
