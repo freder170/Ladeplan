@@ -1,13 +1,13 @@
 {
-  "updated": "2026-10-18T05:09:01.205339+02:00",
-  "soc": 60.7,
-  "soc_updated": "2026-10-18T05:09:01.205339+02:00",
+  "updated": "2026-10-18T05:44:44.686717+02:00",
+  "soc": 67.2,
+  "soc_updated": "2026-10-18T05:44:44.686717+02:00",
   "soc_source": "zaptec",
   "soc_est": {
     "base_soc": 39.0,
     "base_at": 1792248132670,
-    "kwh": 20.281,
-    "last_session_kwh": 20.521
+    "kwh": 26.313,
+    "last_session_kwh": 26.553
   },
   "car_plugged": null,
   "car_charging": null,
@@ -17,27 +17,27 @@
     "mode": 3,
     "plugged": true,
     "charging": true,
-    "power_kw": 9.773349,
-    "session_kwh": 20.521,
+    "power_kw": 9.912488999999999,
+    "session_kwh": 26.553,
     "error": null
   },
   "action": "uændret",
   "plan": {
     "charge_now": true,
     "reason": "ugeplan",
-    "need_kwh": 18.0,
+    "need_kwh": 11.9,
     "target": 80,
     "deadline": "2026-10-19T07:04:00+02:00",
     "short": false,
-    "cost": 33.61,
+    "cost": 22.36,
     "blocks": [
       {
-        "start": "2026-10-18T05:09:01.205339+02:00",
+        "start": "2026-10-18T05:44:44.686717+02:00",
         "end": "2026-10-18T06:00:00+02:00"
       },
       {
         "start": "2026-10-19T04:00:00+02:00",
-        "end": "2026-10-19T04:47:16.478066+02:00"
+        "end": "2026-10-19T04:49:54.504899+02:00"
       }
     ],
     "manual_cleared": false
