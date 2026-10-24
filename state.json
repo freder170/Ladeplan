@@ -1,37 +1,27 @@
 {
-<<<<<<< Updated upstream
-  "updated": "2026-10-24T18:42:07.740597+02:00",
+  "updated": "2026-10-24T19:00:01.330455+02:00",
   "soc": 45.0,
-  "soc_updated": "2026-10-24T18:42:07.740597+02:00",
-  "soc_source": "zaptec",
-  "soc_est": {
-    "base_soc": 45.0,
-    "base_at": 1792860115950,
-=======
-  "updated": "2026-10-24T18:42:23.280228+02:00",
-  "soc": 45.0,
-  "soc_updated": "2026-10-24T18:42:23.280228+02:00",
+  "soc_updated": "2026-10-24T19:00:01.330455+02:00",
   "soc_source": "zaptec",
   "soc_est": {
     "base_soc": 45.0,
     "base_at": 1792860122667,
->>>>>>> Stashed changes
     "kwh": 0.0,
-    "last_session_kwh": 0.0
+    "last_session_kwh": 2.529
   },
-  "car_plugged": false,
+  "car_plugged": null,
   "car_charging": null,
   "charger": {
     "name": "Messi Zaptec",
     "id": "a0b3226b-9d90-4854-97f2-ae3394e51b83",
-    "mode": 1,
-    "plugged": false,
-    "charging": false,
-    "power_kw": 0.0,
-    "session_kwh": 0.0,
+    "mode": 3,
+    "plugged": true,
+    "charging": true,
+    "power_kw": 9.627331,
+    "session_kwh": 2.529,
     "error": null
   },
-  "action": "bil ikke tilsluttet",
+  "action": "stoppet",
   "plan": {
     "charge_now": false,
     "reason": "ugeplan",
