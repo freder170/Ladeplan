@@ -3,7 +3,7 @@
     {
       "time": "07:04",
       "pct": 80,
-      "on": true
+      "on": false
     },
     {
       "time": "07:00",
@@ -40,7 +40,7 @@
   "manual": null,
   "soc_manual": {
     "soc": 50,
-    "at": 1792830718694
+    "at": 1792830724139
   },
   "settings": {
     "battery": 84,
@@ -50,5 +50,5 @@
     "transport": 0.25,
     "tax": 0.008
   },
-  "updated": "2026-10-24T08:31:58.694Z"
+  "updated": "2026-10-24T08:32:04.139Z"
 }
