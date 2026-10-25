@@ -33,7 +33,7 @@
     {
       "time": "11:00",
       "pct": 100,
-      "on": true
+      "on": false
     }
   ],
   "override": {
@@ -43,7 +43,7 @@
   "manual": null,
   "soc_manual": {
     "soc": 62,
-    "at": 1792908216322
+    "at": 1792908423540
   },
   "settings": {
     "battery": 84,
@@ -53,5 +53,5 @@
     "transport": 0.25,
     "tax": 0.008
   },
-  "updated": "2026-10-25T06:03:36.322Z"
+  "updated": "2026-10-25T06:07:03.540Z"
 }
