@@ -1,13 +1,20 @@
 {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "updated": "2026-10-25T16:19:04.694664+01:00",
   "soc": 100.0,
   "soc_updated": "2026-10-25T16:19:04.694664+01:00",
+=======
+  "updated": "2026-10-25T16:19:38.712510+01:00",
+  "soc": 37.0,
+  "soc_updated": "2026-10-25T16:19:38.712510+01:00",
+>>>>>>> Stashed changes
   "soc_source": "zaptec",
   "soc_est": {
-    "base_soc": 100.0,
-    "base_at": 1792941530488,
+    "base_soc": 37.0,
+    "base_at": 1792941550949,
     "kwh": 0.0,
+<<<<<<< Updated upstream
     "last_session_kwh": 0.719
 =======
   "updated": "2026-10-25T16:19:19.772429+01:00",
@@ -20,6 +27,9 @@
     "kwh": 0.0,
     "last_session_kwh": 0.746
 >>>>>>> Stashed changes
+=======
+    "last_session_kwh": 0.746
+>>>>>>> Stashed changes
   },
   "car_plugged": null,
   "car_charging": null,
@@ -27,13 +37,18 @@
     "name": "Messi Zaptec",
     "id": "a0b3226b-9d90-4854-97f2-ae3394e51b83",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "mode": 3,
+=======
+    "mode": 5,
+>>>>>>> Stashed changes
     "plugged": true,
-    "charging": true,
-    "power_kw": 9.434081,
-    "session_kwh": 0.719,
+    "charging": false,
+    "power_kw": 0.0,
+    "session_kwh": 0.746,
     "error": null
   },
+<<<<<<< Updated upstream
   "action": "stoppet",
 =======
     "mode": 5,
@@ -45,11 +60,32 @@
   },
   "action": "uændret",
 >>>>>>> Stashed changes
+=======
+  "action": "uændret",
+>>>>>>> Stashed changes
   "plan": {
     "charge_now": false,
-    "reason": "ingen plan",
-    "blocks": [],
-    "deadline": null
+    "reason": "engangs",
+    "need_kwh": 40.1,
+    "target": 80,
+    "deadline": "2026-10-26T06:30:00+01:00",
+    "short": false,
+    "cost": 29.25,
+    "blocks": [
+      {
+        "start": "2026-10-26T00:00:00+01:00",
+        "end": "2026-10-26T01:00:00+01:00"
+      },
+      {
+        "start": "2026-10-26T02:00:00+01:00",
+        "end": "2026-10-26T02:38:54.545455+01:00"
+      },
+      {
+        "start": "2026-10-26T03:00:00+01:00",
+        "end": "2026-10-26T05:00:00+01:00"
+      }
+    ],
+    "manual_cleared": false
   },
   "tariff_source": "skøn",
   "hours": [
