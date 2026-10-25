@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "updated": "2026-10-25T16:19:04.694664+01:00",
   "soc": 100.0,
   "soc_updated": "2026-10-25T16:19:04.694664+01:00",
@@ -8,12 +9,24 @@
     "base_at": 1792941530488,
     "kwh": 0.0,
     "last_session_kwh": 0.719
+=======
+  "updated": "2026-10-25T16:19:19.772429+01:00",
+  "soc": 37.0,
+  "soc_updated": "2026-10-25T16:19:19.772429+01:00",
+  "soc_source": "zaptec",
+  "soc_est": {
+    "base_soc": 37.0,
+    "base_at": 1792941535581,
+    "kwh": 0.0,
+    "last_session_kwh": 0.746
+>>>>>>> Stashed changes
   },
   "car_plugged": null,
   "car_charging": null,
   "charger": {
     "name": "Messi Zaptec",
     "id": "a0b3226b-9d90-4854-97f2-ae3394e51b83",
+<<<<<<< Updated upstream
     "mode": 3,
     "plugged": true,
     "charging": true,
@@ -22,6 +35,16 @@
     "error": null
   },
   "action": "stoppet",
+=======
+    "mode": 5,
+    "plugged": true,
+    "charging": false,
+    "power_kw": 0.0,
+    "session_kwh": 0.746,
+    "error": null
+  },
+  "action": "uændret",
+>>>>>>> Stashed changes
   "plan": {
     "charge_now": false,
     "reason": "ingen plan",
