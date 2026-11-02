@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "updated": "2026-11-02T16:06:45.511234+01:00",
   "soc": 14.0,
   "soc_updated": "2026-11-02T16:06:45.511234+01:00",
@@ -8,6 +9,17 @@
     "base_at": 1793631978244,
     "kwh": 0.0,
     "last_session_kwh": 0.0
+=======
+  "updated": "2026-11-02T16:07:06.018799+01:00",
+  "soc": 14.0,
+  "soc_updated": "2026-11-02T16:07:06.018799+01:00",
+  "soc_source": "zaptec",
+  "soc_est": {
+    "base_soc": 14.0,
+    "base_at": 1793631991362,
+    "kwh": 0.0,
+    "last_session_kwh": 0.02
+>>>>>>> Stashed changes
   },
   "car_plugged": null,
   "car_charging": null,
@@ -16,6 +28,7 @@
     "id": "a0b3226b-9d90-4854-97f2-ae3394e51b83",
     "mode": 3,
     "plugged": true,
+<<<<<<< Updated upstream
     "charging": true,
     "power_kw": 9.647592000000001,
     "session_kwh": 0.0,
@@ -27,6 +40,29 @@
     "reason": "ingen plan",
     "blocks": [],
     "deadline": null
+=======
+    "charging": false,
+    "power_kw": 0.0,
+    "session_kwh": 0.02,
+    "error": null
+  },
+  "action": "uændret",
+  "plan": {
+    "charge_now": false,
+    "reason": "engangs",
+    "need_kwh": 33.6,
+    "target": 50,
+    "deadline": "2026-11-03T17:00:00+01:00",
+    "short": false,
+    "cost": 88.17,
+    "blocks": [
+      {
+        "start": "2026-11-03T00:00:00+01:00",
+        "end": "2026-11-03T03:03:16.363636+01:00"
+      }
+    ],
+    "manual_cleared": false
+>>>>>>> Stashed changes
   },
   "tariff_source": "skøn",
   "hours": [
