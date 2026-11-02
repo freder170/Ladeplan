@@ -1,46 +1,21 @@
 {
-<<<<<<< Updated upstream
-  "updated": "2026-11-02T16:06:45.511234+01:00",
+  "updated": "2026-11-02T16:11:59.703311+01:00",
   "soc": 14.0,
-  "soc_updated": "2026-11-02T16:06:45.511234+01:00",
-  "soc_source": "zaptec",
-  "soc_est": {
-    "base_soc": 14.0,
-    "base_at": 1793631978244,
-    "kwh": 0.0,
-    "last_session_kwh": 0.0
-=======
-  "updated": "2026-11-02T16:07:06.018799+01:00",
-  "soc": 14.0,
-  "soc_updated": "2026-11-02T16:07:06.018799+01:00",
+  "soc_updated": "2026-11-02T16:11:59.703311+01:00",
   "soc_source": "zaptec",
   "soc_est": {
     "base_soc": 14.0,
     "base_at": 1793631991362,
     "kwh": 0.0,
     "last_session_kwh": 0.02
->>>>>>> Stashed changes
   },
   "car_plugged": null,
   "car_charging": null,
   "charger": {
     "name": "Messi Zaptec",
     "id": "a0b3226b-9d90-4854-97f2-ae3394e51b83",
-    "mode": 3,
+    "mode": 5,
     "plugged": true,
-<<<<<<< Updated upstream
-    "charging": true,
-    "power_kw": 9.647592000000001,
-    "session_kwh": 0.0,
-    "error": null
-  },
-  "action": "stoppet",
-  "plan": {
-    "charge_now": false,
-    "reason": "ingen plan",
-    "blocks": [],
-    "deadline": null
-=======
     "charging": false,
     "power_kw": 0.0,
     "session_kwh": 0.02,
@@ -62,7 +37,6 @@
       }
     ],
     "manual_cleared": false
->>>>>>> Stashed changes
   },
   "tariff_source": "skøn",
   "hours": [
