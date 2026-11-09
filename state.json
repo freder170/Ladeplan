@@ -1,11 +1,11 @@
 {
-  "updated": "2026-11-09T14:52:29.696107+01:00",
+  "updated": "2026-11-09T14:53:19.851285+01:00",
   "soc": 20.0,
-  "soc_updated": "2026-11-09T14:52:29.696107+01:00",
+  "soc_updated": "2026-11-09T14:53:19.851285+01:00",
   "soc_source": "zaptec",
   "soc_est": {
     "base_soc": 20.0,
-    "base_at": 1794232337029,
+    "base_at": 1794232385914,
     "kwh": 0.0,
     "last_session_kwh": 0.0
   },
@@ -24,9 +24,23 @@
   "action": "bil ikke tilsluttet",
   "plan": {
     "charge_now": false,
-    "reason": "ingen plan",
-    "blocks": [],
-    "deadline": null
+    "reason": "engangs",
+    "need_kwh": 28.0,
+    "target": 50,
+    "deadline": "2026-11-10T12:00:00+01:00",
+    "short": false,
+    "cost": 77.25,
+    "blocks": [
+      {
+        "start": "2026-11-10T01:00:00+01:00",
+        "end": "2026-11-10T03:00:00+01:00"
+      },
+      {
+        "start": "2026-11-10T04:00:00+01:00",
+        "end": "2026-11-10T04:32:43.636364+01:00"
+      }
+    ],
+    "manual_cleared": false
   },
   "tariff_source": "skøn",
   "hours": [
