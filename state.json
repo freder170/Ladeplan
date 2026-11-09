@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "updated": "2026-11-09T14:53:19.851285+01:00",
   "soc": 20.0,
   "soc_updated": "2026-11-09T14:53:19.851285+01:00",
@@ -6,6 +7,15 @@
   "soc_est": {
     "base_soc": 20.0,
     "base_at": 1794232385914,
+=======
+  "updated": "2026-11-09T14:53:37.205433+01:00",
+  "soc": 20.0,
+  "soc_updated": "2026-11-09T14:53:37.205433+01:00",
+  "soc_source": "zaptec",
+  "soc_est": {
+    "base_soc": 20.0,
+    "base_at": 1794232393004,
+>>>>>>> Stashed changes
     "kwh": 0.0,
     "last_session_kwh": 0.0
   },
@@ -27,7 +37,11 @@
     "reason": "engangs",
     "need_kwh": 28.0,
     "target": 50,
+<<<<<<< Updated upstream
     "deadline": "2026-11-10T12:00:00+01:00",
+=======
+    "deadline": "2026-11-10T09:00:00+01:00",
+>>>>>>> Stashed changes
     "short": false,
     "cost": 77.25,
     "blocks": [
