@@ -36,14 +36,11 @@
       "on": false
     }
   ],
-  "override": {
-    "at": 1795067100000,
-    "pct": 60
-  },
+  "override": null,
   "manual": null,
   "soc_manual": {
-    "soc": 12,
-    "at": 1795018274744
+    "soc": 20,
+    "at": 1795255814252
   },
   "settings": {
     "battery": 84,
@@ -53,5 +50,5 @@
     "transport": 0.25,
     "tax": 0.008
   },
-  "updated": "2026-11-18T16:11:14.744Z"
+  "updated": "2026-11-21T10:10:14.252Z"
 }
