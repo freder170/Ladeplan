@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-23T11:29:44.398147+01:00",
+  "updated": "2026-11-23T23:12:17.708854+01:00",
   "soc": 20.0,
   "soc_updated": "2026-11-23T11:29:44.398147+01:00",
   "soc_source": "zaptec",
@@ -1111,5 +1111,6 @@
       "est": true
     }
   ],
-  "tariffs": null
+  "tariffs": null,
+  "error": "Priser kunne ikke hentes fra Energi Data Service"
 }
